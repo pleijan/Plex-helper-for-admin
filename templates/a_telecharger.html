@@ -34,7 +34,7 @@
             <tr>
               <td> <p>{{ movie['Title'] }}</td></p>
               <td><img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster"></td>
-              <td><input type="button" value="téléchargé" onclick="window.location.href='/delete/{{ movie['imdbID'] }}'"></td>
+              <td><input type="button" value="téléchargé" onclick="window.location.href='/d elete/{{ movie['imdbID'] }}'"></td>
             </tr>
     {% endfor %}
     </table>

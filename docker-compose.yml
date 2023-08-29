@@ -1,0 +1,16 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"  # Port de votre application Flask
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"  # Port pour Nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro  # Fichier de configuration Nginx personnalisé
+    depends_on:
+      - web
