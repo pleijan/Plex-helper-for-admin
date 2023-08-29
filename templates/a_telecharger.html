@@ -12,7 +12,7 @@
       <!-- Bootstrap Javascripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
@@ -25,18 +25,24 @@
   </div>
 </nav>
 
-    {% if added_movies %}
-    <h2>Films ajoutés :</h2>
-    <ul>
-        {% for movie in added_movies %}
-        <li>
-            <img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster">
-            <p><strong>{{ movie['Title'] }}</strong> ({{ movie['Year'] }})</p>
-            <input type="button" value="téléchargé" onclick="window.location.href='/delete/{{ movie['imdbID'] }}'">
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+       {% if added_movies %}
+ <h2>Films a télécharger :</h2>
+<div class="table-responsive">
+    <table class="table align-middle">
+    {% for movie in added_movies %}
+
+            <tr>
+              <td> <p>{{ movie['Title'] }}</td></p>
+              <td><img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster"></td>
+              <td><input type="button" value="téléchargé" onclick="window.location.href='/delete/{{ movie['imdbID'] }}'"></td>
+            </tr>
+    {% endfor %}
+    </table>
+</div>
+ {% endif %}
+
+
+    <h1>c'est tout 😁</h1>
 
 
 </body>

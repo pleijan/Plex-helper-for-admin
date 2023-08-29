@@ -37,18 +37,12 @@
 <div class="table-responsive">
     <table class="table align-middle">
     {% for movie in movies %}
-        <thead>
-            <tr>
-            {{ movie['Title'] }}
-            </tr>
-        </thead>
 
-        <tbody>
             <tr>
-              <img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster">
-              <input type="button" value="Ajouter" onclick="window.location.href='/ajout/{{ movie['imdbID'] }}'"> <!-- add in the url the imdbID of the movie -->
+              <td> <p>{{ movie['Title'] }}</td></p>
+              <td><img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster"></td>
+              <td><input type="button" value="Ajouter" onclick="window.location.href='/ajout/{{ movie['imdbID'] }}'"></td>
             </tr>
-        </tbody>
     {% endfor %}
     </table>
 </div>
