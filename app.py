@@ -38,15 +38,12 @@ def search():
     if request.method == 'GET':
         # ask API for movies that return a json to store on a variable
 
-        print (request.args.get('movie', ''))
-
         payload = { 's': request.args.get('movie', ''),'apikey': 'ffc487eb'}
         r = requests.get('https://www.omdbapi.com/', params=payload)
         if r.json()['Response'] == 'False':
             alert = "Aucun film ne correspond à votre recherche"
             return render_template('index.html', alert=alert)
 
-        print(r.json())
         return render_template('index.html', movies=r.json()['Search'])
 
     elif request.method == 'POST':
