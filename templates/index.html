@@ -15,10 +15,10 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Accueil <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/">Accueil <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">A télécharger</a>
+        <a class="nav-link" href="/to_download">A télécharger</a>
       </li>
     </ul>
   </div>
@@ -27,15 +27,24 @@
 
   <h1> Demande de Film </h1>
 
+  <form action="/recherche" method="get">
+      <input type="text" name="movie" placeholder="Nom du film">
+      <input type="submit" value="Rechercher">
+  </form>
 
+ {% if movies %}
+    <h2>Films ajoutés :</h2>
 
-
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script>
-      $.get("http://www.omdbapi.com/?s=inception&apikey=ffc487eb", function(data) {
-        console.table(data);
-      });
-    </script>
+    <table>
+        {% for movie in movies %}
+        <tr>
+            <img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster">
+            <p><strong>{{ movie['Title'] }}</strong> ({{ movie['Year'] }})</p>
+            <input type="button" value="Ajouter" onclick="window.location.href='/ajout/{{ movie['imdbID'] }}'"> <!-- add in the url the imdbID of the movie -->
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
 
 
 

@@ -4,15 +4,26 @@
     <meta charset="UTF-8">
     <title>Demande de Film</title>
 
-
-      <!-- Bootstrap CSS -->
+            <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+       <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
   </head>
   <body>
-
       <!-- Bootstrap Javascripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Accueil <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/to_download">A télécharger</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
     {% if added_movies %}
     <h2>Films ajoutés :</h2>
@@ -21,13 +32,12 @@
         <li>
             <img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster">
             <p><strong>{{ movie['Title'] }}</strong> ({{ movie['Year'] }})</p>
-            <input type="button" value="téléchargé">
+            <input type="button" value="téléchargé" onclick="window.location.href='/delete/{{ movie['imdbID'] }}'">
         </li>
         {% endfor %}
     </ul>
     {% endif %}
 
-    <h2>Tout les films ont été ajouté au serveur 😁 !!</h2>
 
 </body>
 </html>
