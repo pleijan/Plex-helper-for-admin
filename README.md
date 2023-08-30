@@ -6,4 +6,6 @@ you just need to have docker and docker compose
 
 # How to run the project
 
-''' docker compose up -d --build '''
+''' 
+docker compose up -d --build 
+'''
