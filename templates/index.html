@@ -33,17 +33,19 @@
   </form>
 
  {% if movies %}
-<h2> Films Disponible :</h2>
+<h2> Résultats pour :</h2>
 <div class="table-responsive">
     <table class="table align-middle">
-    {% for movie in movies %}
+        <tr>
+            {% for movie in movies %}
+                <td style="text-align: center;color: white"><img onclick="window.location.href='/film/{{ movie['imdbID'] }}'" src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster"><br> <p>{{ movie['Title'] }}</p> </td>
+                {% if loop.index % 3 == 0 %}
+                    </tr><tr>
+                {% endif %}
 
-            <tr>
-              <td> <p>{{ movie['Title'] }}</td></p>
-              <td><img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster"></td>
-              <td><input type="button" value="Ajouter" onclick="window.location.href='/ajout/{{ movie['imdbID'] }}'"></td>
-            </tr>
-    {% endfor %}
+
+            {% endfor %}
+        </tr>
     </table>
 </div>
  {% endif %}

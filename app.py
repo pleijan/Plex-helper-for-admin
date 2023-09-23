@@ -31,6 +31,14 @@ with app.app_context():
 def index():
    return render_template('index.html')
 
+@app.route('/film/<imdbid>')
+def film(imdbid):
+    # ask api for information about the film and return a json
+    payload = { 'i': imdbid,'apikey': 'ffc487eb', 'plot': 'full'}
+    r = requests.get('https://www.omdbapi.com/', params=payload)
+    print(r.json())
+    return render_template('film.html', movie=r.json())
+
 
 @app.route('/recherche', methods=['GET', 'POST'])
 def search():
@@ -38,7 +46,7 @@ def search():
     if request.method == 'GET':
         # ask API for movies that return a json to store on a variable
 
-        payload = { 'plot':'full', 's': request.args.get('movie', ''),'apikey': 'ffc487eb'}
+        payload = { 's': request.args.get('movie', ''),'apikey': 'ffc487eb'}
         r = requests.get('https://www.omdbapi.com/', params=payload)
         print (r.json())
         if r.json()['Response'] == 'False':
