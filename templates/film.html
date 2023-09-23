@@ -36,25 +36,38 @@
 
         <h2> {{ movie['Title'] }}  <input type="button" value="Ajouter" onclick="window.location.href='/ajout/{{ movie['imdbID'] }}'"></h2>
 
-        <img style="text-align: center; width: 450px" src="{{ movie['Poster'] }}" alt="Poster du film {{ movie['Title'] }}">
+              <table style="width: 100%">
+                  <tr>
+                      <td>
+                           <img style="text-align: center; width: 450px;margin-right: 30px" src="{{ movie['Poster'] }}" alt="Poster du film {{ movie['Title'] }}">
+                      </td>
+                      <td >
+                          <table >
+                                <tr><p> Année de sortie : {{ movie['Year'] }} </p></tr>
 
-        <p> Année de sortie : {{ movie['Year'] }} </p>
+                                <tr><p> Genre : {{ movie['Genre'] }} </p></tr>
 
-        <p> Genre : {{ movie['Genre'] }} </p>
+                                <tr><p> Réalisateur : {{ movie['Director'] }} </p></tr>
 
-        <p> Réalisateur : {{ movie['Director'] }} </p>
+                               <tr> <p> Acteurs : {{ movie['Actors'] }} </p></tr>
 
-        <p> Acteurs : {{ movie['Actors'] }} </p>
+                                <tr><p> Synopsis : {{ movie['Plot'] }} </p></tr>
 
-        <p> Synopsis : {{ movie['Plot'] }} </p>
+                                <tr><p> Note : {{ movie['imdbRating'] }} </p></tr>
 
-        <p> Note : {{ movie['imdbRating'] }} </p>
+                                <tr><p> Durée : {{ movie['Runtime'] }} </p></tr>
 
-        <p> Durée : {{ movie['Runtime'] }} </p>
+                                <tr><p> Pays : {{ movie['Country'] }} </p></tr>
 
-        <p> Pays : {{ movie['Country'] }} </p>
+                                <tr><p> Langue : {{ movie['Language'] }} </p></tr>
+                          </table>
+                      </td>
+                  </tr>
+              </table>
 
-        <p> Langue : {{ movie['Language'] }} </p>
+
+
+
             </div>
       {% endif %}
 
