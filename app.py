@@ -1,5 +1,5 @@
 import os
-
+import hashlib
 import requests
 from flask import Flask, render_template, request, url_for, redirect,session
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
@@ -90,9 +90,9 @@ def connexion():
         if request.method == 'POST':
             # verify if the user is in the database
             username = request.form['username']
-            password = request.form['password']
-            if session.query(User).filter_by(name=username,password=password).first() != None:
-                user = session.query(User).filter_by(name=username,password=password).first()
+            hash_password = hashlib.sha256(request.form['password'].encode()).hexdigest()
+            if sessionBdd.query(User).filter_by(name=username,password=hash_password).first() != None:
+                user = sessionBdd.query(User).filter_by(name=username,password=hash_password).first()
                 session['connecteduser'] = user_to_dict(user)
                 return redirect(url_for('user'))
             else:
@@ -112,13 +112,16 @@ def inscription():
         return redirect(url_for('user'))
     else:
         if request.method == 'POST':
+
+
+
             # add user to database
             username = request.form['username']
-            password = request.form['password']
+            hash_password = hashlib.sha256(request.form['password'].encode()).hexdigest()
             email = request.form['email']
 
             # Assuming your SQLAlchemy model class is named 'User'
-            new_user = User(name=username, password=password, email=email)
+            new_user = User(name=username, password=hash_password, email=email)
 
             sessionBdd.add(new_user)
             sessionBdd.commit()
