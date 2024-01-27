@@ -5,10 +5,22 @@ from flask import Flask, render_template, request, url_for, redirect,session
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from flask_mail import Mail, Message
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.secret_key = 'clesecretedefou'
+
+app.config['MAIL_SERVER'] = 'smtp.office365.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'demandedefilm@outlook.com'  # Remplacez par votre adresse Outlook
+app.config['MAIL_PASSWORD'] = 'your_password'  # Remplacez par votre mot de passe Outlook
+app.config['MAIL_DEFAULT_SENDER'] = 'demandedefilm@outlook.com'  # Adresse d'expédition par défaut
+
+mail = Mail(app)
+
 Base = declarative_base()
 
 global connecteduser # variable globale pour savoir si un utilisateur est connecté
@@ -22,21 +34,13 @@ class User(Base):
     email = Column(String, nullable=False)
 
 
-class Movie(Base):
-    __tablename__ = 'movie'
-    id = Column(Integer, primary_key=True)
-    Title = Column(String, nullable=False)
-    Year = Column(String)
-    imdbID = Column(String)
-    Poster = Column(String)
-
 class MovieDemande(Base):
     __tablename__ = 'moviedemande'
     id = Column(Integer, primary_key=True)
     Title = Column(String, nullable=False)
-    Year = Column(String)
-    imdbID = Column(String)
-    Poster = Column(String)
+    Year = Column(String, nullable=False)
+    imdbID = Column(String, nullable=False)
+    Poster = Column(String, nullable=False)
     demandepar = Column(Integer, ForeignKey('user.id'))
 
 
@@ -158,7 +162,7 @@ def search():
         # get the value of the input with name 'movie' and add it to database
         movie = request.form['movie']
         # add movie to database
-        new_movie = Movie(Title=movie)
+        new_movie = MovieDemande(Title=movie)
         sessionBdd.add(new_movie)
         sessionBdd.commit()
         return redirect(url_for('index'))
@@ -169,7 +173,7 @@ def ajout(IDimdb):
     payload = { 'i': IDimdb,'apikey': 'ffc487eb'}
     r = requests.get('https://www.omdbapi.com/', params=payload)
     print(r.json())
-    new_movie = Movie(Title=r.json()['Title'], Year=r.json()['Year'], imdbID=r.json()['imdbID'], Poster=r.json()['Poster'])
+    new_movie = MovieDemande(Title=r.json()['Title'], Year=r.json()['Year'], imdbID=r.json()['imdbID'], Poster=r.json()['Poster'], demandepar=connecteduser['id'])
     sessionBdd.add(new_movie)
     sessionBdd.commit()
     alert = "Le film a bien été ajouté"
@@ -180,7 +184,7 @@ def to_download():
     connecteduser = session.get('connecteduser', None)
     #si l'utilisateur est admin, on affiche tous les films
     if connecteduser != None and connecteduser['name'] == 'admin':
-        movies = sessionBdd.query(Movie).all()
+        movies = sessionBdd.query(MovieDemande).all()
         return render_template('a_telecharger.html', added_movies=movies, connecteduser=connecteduser)
     #sinon retour à l'accueil
     else:
@@ -189,11 +193,21 @@ def to_download():
 
 @app.route('/delete/<imdbid>')
 def delete(imdbid):
+    connecteduser = session.get('connecteduser', None)
+    # si le film a été demander par un utilisateur alors on lui envoi un mail pour le prévenir
+    if connecteduser != None:
+        movie = sessionBdd.query(MovieDemande).filter_by(imdbID=imdbid).first()
+        user = sessionBdd.query(User).filter_by(id=movie.demandepar).first()
+        print(user.email)
 
-    movie = sessionBdd.query(Movie).filter_by(imdbID=imdbid).first()
-    sessionBdd.delete(movie)
-    sessionBdd.commit()
-    return redirect(url_for('to_download'))
+        msg = Message('Votre film est disponible', recipients=[user.email])
+        msg.body = "Bonjour, votre film est disponible sur le site"
+        mail.send(msg)
+
+        sessionBdd.delete(movie)
+
+        return redirect(url_for('to_download'))
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
