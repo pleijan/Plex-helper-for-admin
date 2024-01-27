@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demande de Film</title>
+
+            <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+       <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+  </head>
+  <body>
+      <!-- Bootstrap Javascripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Accueil</a>
+      </li>
+        {% if connecteduser %}
+        <li class="nav-item">
+            <a class="nav-link" href="/user">Profil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/deconnexion">Déconnexion</a>
+        </li>
+
+        {% if connecteduser.name == "admin" %}
+      <li class="nav-item">
+        <a class="nav-link" href="/to_download">A télécharger</a>
+      </li>
+        {% endif %}
+
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="/connexion_inscription">Connexion</a>
+        </li>
+        {% endif %}
+
+    </ul>
+  </div>
+</nav>
+
+      {% if alert %}
+        <div class="alert" role="alert">
+            {{ alert }}
+        </div>
+        {% endif %}
+
+  <h1>Connexion / inscription</h1>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm" style="padding : 10px">
+                <h2>Connexion</h2>
+                <p>Connectez-vous pour accéder à votre profil et à vos films à télécharger.</p>
+                <p>Si vous n'avez pas encore de compte, vous pouvez en créer un en remplissant le formulaire d'inscription.</p>
+                <form action="/connexion" method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" hint="pseudo" class="form-control" id="username" name="username" aria-describedby="usernameHelp">
+                        <div id="usernameHelp" class="form-text">Votre nom d'utilisateur est public.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                </form>
+            </div>
+
+
+
+            <div class="col-sm" style="padding : 10px">
+                <h2>Inscription</h2>
+                <p>Créez un compte pour accéder à votre profil et à vos films à télécharger.</p>
+                <p>Si vous avez déjà un compte, vous pouvez vous connecter en remplissant le formulaire de connexion.</p>
+                <form action="/inscription" method="post">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Adresse email</label>
+                        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">Nous ne partagerons jamais votre email avec qui que ce soit.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" class="form-control" id="username" name="username" aria-describedby="usernameHelp">
+                        <div id="usernameHelp" class="form-text">Votre nom d'utilisateur est public.</div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">S'inscrire</button>
+                </form>
+            </div>
+        </div>
+
+

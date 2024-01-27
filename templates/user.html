@@ -44,25 +44,14 @@
   </div>
 </nav>
 
-       {% if added_movies %}
- <h2>Films a télécharger :</h2>
-<div class="table-responsive">
-    <table class="table align-middle">
-    {% for movie in added_movies %}
+  <h1> Demande de Film </h1>
 
-            <tr>
-              <td> <p>{{ movie['Title'] }}</td></p>
-              <td><img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster"></td>
-              <td><input type="button" value="téléchargé" onclick="window.location.href='/delete/{{ movie['imdbID'] }}'"></td>
-            </tr>
-    {% endfor %}
-    </table>
-</div>
- {% endif %}
+  <form action="/recherche" method="get">
+      <input type="text" name="movie" placeholder="Nom du film">
+      <input type="submit" value="Rechercher">
+  </form>
 
 
-    <h1>c'est tout 😁</h1>
-
-
-</body>
-</html>
+{% if connecteduser %}
+<h1>Bonjour {{ connecteduser }} !</h1>
+{% endif %}
