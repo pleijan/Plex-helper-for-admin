@@ -44,14 +44,31 @@
   </div>
 </nav>
 
-  <h1> Demande de Film </h1>
-
-  <form action="/recherche" method="get">
-      <input type="text" name="movie" placeholder="Nom du film">
-      <input type="submit" value="Rechercher">
-  </form>
-
-
 {% if connecteduser %}
-<h1>Bonjour {{ connecteduser }} !</h1>
+<h1>Bonjour {{ connecteduser.name }} !</h1>
 {% endif %}
+
+<body class="container mt-4">
+
+    <div class="row">
+        <div class="user-info">
+            <h2>Pseudo: JohnDoe</h2>
+            <p>Email: john.doe@example.com</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="movie-list requested-movies">
+                <h1>Films demandés</h1>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="movie-list recommended-movies">
+                <h1>Films recommandés</h1>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

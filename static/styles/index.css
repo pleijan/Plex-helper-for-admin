@@ -15,12 +15,18 @@ h1{
     margin-top: 50px;
 }
 
-h2{
+h2,h3,h4,h5,h6 {
     text-align: center;
     color: #fff;
     font-size: 30px;
     margin-top: 50px;
     margin-bottom: 20px;
+}
+
+li {
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
 }
 
 p {
