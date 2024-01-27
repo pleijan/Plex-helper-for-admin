@@ -58,6 +58,7 @@ def user_to_dict(user):
 @app.route('/')
 def index():
     connecteduser = session.get('connecteduser', None)
+
     return render_template('index.html', connecteduser=connecteduser)
 
 
@@ -173,6 +174,8 @@ def search():
 @app.route('/ajout/<IDimdb>')
 def ajout(IDimdb):
     connecteduser = session.get('connecteduser', None)
+    if connecteduser == None:
+        return redirect(url_for('connexion_inscription'))
     payload = { 'i': IDimdb,'apikey': 'ffc487eb'}
     r = requests.get('https://www.omdbapi.com/', params=payload)
     print(r.json())
