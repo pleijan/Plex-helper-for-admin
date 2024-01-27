@@ -199,9 +199,15 @@ def delete(imdbid):
         movie = sessionBdd.query(MovieDemande).filter_by(imdbID=imdbid).first()
         user = sessionBdd.query(User).filter_by(id=movie.demandepar).first()
         print(user.email)
+        body = body = f"""
+            <p>Bonjour,</p>
+            <p>Le film que vous avez demandé est téléchargé :</p>
+            <p><strong>Nom du Film :</strong> {movie.Title}</p>
+            <p><strong>Affiche du Film :</strong> <img src="{movie.Poster}" alt="Affiche du Film" style="max-width: 300px;"></p>
+            <p>Merci!</p>
+            """
+        msg = Message('Votre film est disponible', recipients=[user.email],html=body)
 
-        msg = Message('Votre film est disponible', recipients=[user.email])
-        msg.body = "Bonjour, votre film est disponible sur le site"
         mail.send(msg)
 
         sessionBdd.delete(movie)
