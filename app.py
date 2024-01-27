@@ -2,7 +2,7 @@ import os
 
 import requests
 from flask import Flask, render_template, request, url_for, redirect,session
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -29,6 +29,15 @@ class Movie(Base):
     Year = Column(String)
     imdbID = Column(String)
     Poster = Column(String)
+
+class MovieDemande(Base):
+    __tablename__ = 'moviedemande'
+    id = Column(Integer, primary_key=True)
+    Title = Column(String, nullable=False)
+    Year = Column(String)
+    imdbID = Column(String)
+    Poster = Column(String)
+    demandepar = Column(Integer, ForeignKey('user.id'))
 
 
 # Connexion à la première base de données
