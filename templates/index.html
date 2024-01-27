@@ -52,11 +52,12 @@
                  <h1> Demande de Film </h1>
 
             <!-- Formulaire de recherche qui prend tout la largeur moins la taille du bouton -->
-            <form action="/search" method="post">
+            <form action="/recherche" method="get">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Rechercher un film" aria-label="Rechercher un film" aria-describedby="button-addon2" name="search">
+                    <input type="text" class="form-control" placeholder="Rechercher un film" aria-label="Rechercher un film" aria-describedby="button-addon2" name="movie">
                     <button class="btn btn-primary" type="submit" id="button-addon2">Rechercher</button>
                 </div>
+            </form>
 
  {% if movies %}
 <h2> Résultats pour :</h2>

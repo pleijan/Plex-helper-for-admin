@@ -41,10 +41,10 @@ class MovieDemande(Base):
 
 
 # Connexion à la première base de données
-user = create_engine('sqlite:///bdd.db')
-Base.metadata.create_all(user)
-SessionUser = sessionmaker(bind=user)
-sessionUser = SessionUser()
+bdd = create_engine('sqlite:///bdd.db')
+Base.metadata.create_all(bdd)
+SessionBdd = sessionmaker(bind=bdd)
+sessionBdd = SessionBdd()
 
 
 def user_to_dict(user):
@@ -87,8 +87,8 @@ def connexion():
             # verify if the user is in the database
             username = request.form['username']
             password = request.form['password']
-            if sessionUser.query(User).filter_by(name=username,password=password).first() != None:
-                user = sessionUser.query(User).filter_by(name=username,password=password).first()
+            if session.query(User).filter_by(name=username,password=password).first() != None:
+                user = session.query(User).filter_by(name=username,password=password).first()
                 session['connecteduser'] = user_to_dict(user)
                 return redirect(url_for('user'))
             else:
@@ -116,8 +116,8 @@ def inscription():
             # Assuming your SQLAlchemy model class is named 'User'
             new_user = User(name=username, password=password, email=email)
 
-            sessionUser.add(new_user)
-            sessionUser.commit()
+            sessionBdd.add(new_user)
+            sessionBdd.commit()
 
             session['connecteduser'] = user_to_dict(new_user)
 
@@ -159,8 +159,8 @@ def search():
         movie = request.form['movie']
         # add movie to database
         new_movie = Movie(Title=movie)
-        sessionMovie.add(new_movie)
-        sessionMovie.commit()
+        sessionBdd.add(new_movie)
+        sessionBdd.commit()
         return redirect(url_for('index'))
 
 @app.route('/ajout/<IDimdb>')
@@ -170,8 +170,8 @@ def ajout(IDimdb):
     r = requests.get('https://www.omdbapi.com/', params=payload)
     print(r.json())
     new_movie = Movie(Title=r.json()['Title'], Year=r.json()['Year'], imdbID=r.json()['imdbID'], Poster=r.json()['Poster'])
-    sessionMovie.add(new_movie)
-    sessionMovie.commit()
+    sessionBdd.add(new_movie)
+    sessionBdd.commit()
     alert = "Le film a bien été ajouté"
     return render_template('index.html', alert=alert, connecteduser=connecteduser)
 
@@ -180,7 +180,7 @@ def to_download():
     connecteduser = session.get('connecteduser', None)
     #si l'utilisateur est admin, on affiche tous les films
     if connecteduser != None and connecteduser['name'] == 'admin':
-        movies = sessionMovie.query(Movie).all()
+        movies = sessionBdd.query(Movie).all()
         return render_template('a_telecharger.html', added_movies=movies, connecteduser=connecteduser)
     #sinon retour à l'accueil
     else:
@@ -190,9 +190,9 @@ def to_download():
 @app.route('/delete/<imdbid>')
 def delete(imdbid):
 
-    movie = sessionMovie.query(Movie).filter_by(imdbID=imdbid).first()
-    sessionMovie.delete(movie)
-    sessionMovie.commit()
+    movie = sessionBdd.query(Movie).filter_by(imdbID=imdbid).first()
+    sessionBdd.delete(movie)
+    sessionBdd.commit()
     return redirect(url_for('to_download'))
 
 if __name__ == '__main__':
