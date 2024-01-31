@@ -95,6 +95,31 @@
 
                     <H1> Films recommandé </H1>
 
+                    {% if connecteduser %}
+                    {% for movie in movies %}
+                    {% if movie['Title'] in connecteduser.movies %}
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <tr>
+                                <td style="text-align: center;color: white"><img onclick="window.location.href='/film/{{ movie['imdbID'] }}'" src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster"><br> <p>{{ movie['Title'] }}</p> </td>
+                                {% if loop.index % 3 == 0 %}
+                                    </tr><tr>
+                                {% endif %}
+                            </tr>
+                        </table>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <p> Connectez-vous pour avoir des recommandations </p>
+
+                        <!-- div pour centrer le bouton -->
+                        <div style="text-align: center">
+                        <!-- bouton qui renvoie vers la page de connexion -->
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='/connexion_inscription'">Connexion</button>
+
+                        </div>
+                    {% endif %}
+
                 </div>
 
             </div>

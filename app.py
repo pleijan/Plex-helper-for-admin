@@ -42,6 +42,7 @@ class MovieDemande(Base):
     imdbID = Column(String, nullable=False)
     Poster = Column(String, nullable=False)
     demandepar = Column(Integer, ForeignKey('user.id'))
+    nomdemandepar = Column(String, nullable=False)
 
 
 # Connexion à la première base de données
@@ -90,6 +91,10 @@ def connexion():
     else:
         if request.method == 'POST':
             # verify if the user is in the database
+            if request.form['password'] == '' or request.form['username'] == '':
+                alert = "Veuillez remplir tous les champs"
+                return redirect(url_for('connexion_inscription', alert=alert))
+
             username = request.form['username']
             hash_password = hashlib.sha256(request.form['password'].encode()).hexdigest()
             if sessionBdd.query(User).filter_by(name=username,password=hash_password).first() != None:
@@ -114,7 +119,9 @@ def inscription():
     else:
         if request.method == 'POST':
 
-
+            if request.form['password'] == '' or request.form['username'] == '' or request.form['email'] == '':
+                alert = "Veuillez remplir tous les champs"
+                return redirect(url_for('connexion_inscription', alert=alert))
 
             # add user to database
             username = request.form['username']
@@ -162,15 +169,6 @@ def search():
 
         return render_template('index.html', movies=r.json()['Search'], connecteduser=connecteduser)
 
-    elif request.method == 'POST':
-        # get the value of the input with name 'movie' and add it to database
-        movie = request.form['movie']
-        # add movie to database
-        new_movie = MovieDemande(Title=movie)
-        sessionBdd.add(new_movie)
-        sessionBdd.commit()
-        return redirect(url_for('index'))
-
 @app.route('/ajout/<IDimdb>')
 def ajout(IDimdb):
     connecteduser = session.get('connecteduser', None)
@@ -179,7 +177,7 @@ def ajout(IDimdb):
     payload = { 'i': IDimdb,'apikey': 'ffc487eb'}
     r = requests.get('https://www.omdbapi.com/', params=payload)
     print(r.json())
-    new_movie = MovieDemande(Title=r.json()['Title'], Year=r.json()['Year'], imdbID=r.json()['imdbID'], Poster=r.json()['Poster'], demandepar=connecteduser['id'])
+    new_movie = MovieDemande(Title=r.json()['Title'], Year=r.json()['Year'], imdbID=r.json()['imdbID'], Poster=r.json()['Poster'], demandepar=connecteduser['id'], nomdemandepar=connecteduser['name'])
     sessionBdd.add(new_movie)
     sessionBdd.commit()
     alert = "Le film a bien été ajouté"

@@ -53,6 +53,7 @@
             <tr>
               <td> <p>{{ movie['Title'] }}</td></p>
               <td><img src="{{ movie['Poster'] }}" alt="{{ movie['Title'] }} poster"></td>
+                <td><p style="text-align:center">demandé par : {{ movie['nomdemandepar'] }}</p></td>
               <td><input type="button" value="téléchargé" onclick="window.location.href='/delete/{{ movie['imdbID'] }}'"></td>
             </tr>
     {% endfor %}
